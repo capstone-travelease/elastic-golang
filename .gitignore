@@ -1,0 +1,7 @@
+elastic-golang
+Capstone-CloudSQL.session.sql
+data.json
+tmp/
+vendor/
+.vscode/
+.env
