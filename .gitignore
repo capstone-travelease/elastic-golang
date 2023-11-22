@@ -5,3 +5,6 @@ tmp/
 vendor/
 .vscode/
 .env
+LocalDB.session.sql
+.DS_Store
+go.sum
