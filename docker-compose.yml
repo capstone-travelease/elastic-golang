@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  golang:
+    container_name: elastic-golang
+    image: coderbillzay/elastic-golang
+    ports:
+      - '2160:2160'
+    volumes:
+      - ./:/server
+    restart: always
