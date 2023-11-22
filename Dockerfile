@@ -11,5 +11,5 @@ RUN go build .
 COPY . .
 RUN go install github.com/cosmtrek/air@latest
 
-EXPOSE 2190
+EXPOSE 2160
 CMD ["air"]
