@@ -5,6 +5,8 @@ services:
     image: coderbillzay/elastic-golang
     ports:
       - '2160:2160'
+    env_file:
+      - .env
     volumes:
       - ./:/server
     restart: always
