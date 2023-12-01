@@ -92,7 +92,7 @@ func SearchDoc(inputName string) ([]models.DataResponse, error) {
 	}`, inputName)
 
 	res, _ := es.Search(
-		es.Search.WithIndex("test_dataset"),
+		es.Search.WithIndex("demo_dataset"),
 		es.Search.WithBody(strings.NewReader(query)),
 	)
 
