@@ -17,10 +17,10 @@ type Hits struct {
 }
 
 type HitData struct {
-	Index  string       `json:"_index"`
-	Id     string       `json:"_id"`
-	Score  float64      `json:"_score"`
-	Source DataResponse `json:"_source"`
+	Index  string           `json:"_index"`
+	Id     string           `json:"_id"`
+	Score  float64          `json:"_score"`
+	Source LocationResponse `json:"_source"`
 }
 
 type DataResponse struct {
@@ -31,4 +31,12 @@ type DataResponse struct {
 	Category         string `json:"category"`
 	HeadLine         string `json:"headline"`
 	Authors          string `json:"authors"`
+}
+
+type LocationResponse struct {
+	PlaceName     string `json:"place_name"`
+	Code          int    `json:"code"`
+	DivisionType  string `json:"division_type"`
+	CodePlaceName string `json:"codeplace_name"`
+	PhoneCode     int    `json:"phone_code"`
 }

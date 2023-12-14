@@ -46,53 +46,27 @@ func IndexDoc() {
 	es.Index("my_index", bytes.NewReader(data))
 }
 
-func SearchAll() ([]models.DataResponse, error) {
-	es, err := ConnectElastic()
-	if err != nil {
-		log.Fatalf("Error connect the Elastic client: %s", err)
-	}
-
-	var r models.SearchResults
-	var result []models.DataResponse
-
-	query := `{"track_total_hits" :true}`
-	res, _ := es.Search(
-		es.Search.WithIndex("test_dataset"),
-		es.Search.WithBody(strings.NewReader(query)),
-	)
-
-	json.NewDecoder(res.Body).Decode(&r)
-
-	data := r.Hits.Hits
-
-	for i := range data {
-		result = append(result, data[i].Source)
-	}
-	return result, nil
-}
-
-func SearchDoc(inputName string) ([]models.DataResponse, error) {
+func SearchDoc(inputName string) ([]models.LocationResponse, error) {
 	es, err := ConnectElastic()
 	if err != nil {
 		log.Fatalf("Error creating the client: %s", err)
 	}
 
 	var r models.SearchResults
-	var result []models.DataResponse
+	var result []models.LocationResponse
 
 	query := fmt.Sprintf(`{
 		"query": {
 			"match": {
-				"headline": {
-					"query": "%v",
-					"operator" : "and"
+				"place_name": {
+					"query": "%v"
 				}
 			}
 		}
 	}`, inputName)
 
 	res, _ := es.Search(
-		es.Search.WithIndex("demo_dataset"),
+		es.Search.WithIndex("vietnam_location"),
 		es.Search.WithBody(strings.NewReader(query)),
 	)
 
@@ -104,37 +78,4 @@ func SearchDoc(inputName string) ([]models.DataResponse, error) {
 		result = append(result, data[i].Source)
 	}
 	return result, nil
-}
-
-func Test() ([]models.HitData, error) {
-	es, err := ConnectElastic()
-	if err != nil {
-		log.Fatalf("Error creating the client: %s", err)
-	}
-
-	var r models.SearchResults
-
-	query := `{
-		"query": {
-			"match": {
-				"headline": {
-					"query": "Khloe",
-					"operator" : "and"
-				}
-			}
-		}
-	}`
-	res, _ := es.Search(
-		es.Search.WithIndex("test_dataset"),
-		es.Search.WithBody(strings.NewReader(query)),
-	)
-
-	json.NewDecoder(res.Body).Decode(&r)
-
-	data := r.Hits.Hits
-
-	// for i := range data {
-	// 	result := append(result, data[i].Source)
-	// }
-	return data, nil
 }

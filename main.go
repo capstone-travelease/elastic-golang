@@ -28,9 +28,7 @@ func main() {
 	api := app.Group("/api")
 	{
 		api.GET("/search/:name", controller.SearchElasticController)
-		api.GET("/search", controller.SearchAllController)
 	}
-	app.GET("/test", controller.TestController)
 	app.GET("/connectDB", controller.PostgresControllerConnect)
 
 	app.Run(":" + os.Getenv("PORT"))
