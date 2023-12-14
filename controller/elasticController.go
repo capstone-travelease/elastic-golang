@@ -8,7 +8,7 @@ import (
 )
 
 func SearchElasticController(c *gin.Context) {
-	inputName := c.Param("name")
+	inputName := c.Query("name")
 
 	result, err := services.SearchDoc(inputName)
 	if err != nil {
