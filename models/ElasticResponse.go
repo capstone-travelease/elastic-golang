@@ -34,9 +34,32 @@ type DataResponse struct {
 }
 
 type LocationResponse struct {
-	PlaceName     string `json:"place_name"`
+	PlaceName     string `json:"placeName"`
 	Code          int    `json:"code"`
-	DivisionType  string `json:"division_type"`
-	CodePlaceName string `json:"codeplace_name"`
-	PhoneCode     int    `json:"phone_code"`
+	DivisionType  string `json:"divisionType"`
+	CodePlaceName string `json:"codePlaceName"`
+	PhoneCode     int    `json:"phoneCode"`
+}
+
+type SearchAllResults struct {
+	Took   int                        `json:"took"`
+	Shards json.RawMessage            `json:"_shards"`
+	Hits   HitsAll                    `json:"hits"`
+	Aggs   map[string]json.RawMessage `json:"aggregations"`
+}
+
+type HitsAll struct {
+	Total int
+	Hits  []HitAllData `json:"hits"`
+}
+
+type HitAllData struct {
+	Index  string         `json:"_index"`
+	Id     string         `json:"_id"`
+	Score  float64        `json:"_score"`
+	Source ResultLocation `json:"_source"`
+}
+type ResultLocation struct {
+	PlaceName string `json:"placeName"`
+	Code      int    `json:"code"`
 }

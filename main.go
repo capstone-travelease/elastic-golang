@@ -28,6 +28,7 @@ func main() {
 	api := app.Group("/api")
 	{
 		api.GET("/location/search", controller.SearchElasticController)
+		api.GET("/location/", controller.AllLocationController)
 	}
 	app.GET("/connectDB", controller.PostgresControllerConnect)
 
