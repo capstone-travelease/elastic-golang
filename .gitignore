@@ -9,3 +9,5 @@ LocalDB.session.sql
 .DS_Store
 go.sum
 elastic-mapping.json
+json_bulk_location.json
+location_delimitedJSON.json

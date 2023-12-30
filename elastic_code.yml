@@ -1,0 +1,246 @@
+// Check status elastic search
+GET /_cat/health?v
+
+// Check indices in elastic serach
+GET /_cat/indices?v
+
+GET vietnam_location/_settings
+
+GET vietnam_location/_mapping
+
+// Show all config
+GET /vietnam_location
+
+// Search All
+GET /vietnam_location/_search
+{
+  "size" : 63,
+  "query": {
+    "match_all": {}
+  }
+}
+
+GET /vietnam_location/_search
+{
+  "query": {
+    "match": {
+      "placeName": "Ho"
+    }
+  }
+}
+
+POST /vietnam_location/_close
+ 
+POST /vietnam_location/_open
+
+// Configuration Index & Mapping
+PUT /vietnam_location
+{
+  "mappings": {
+       "properties": {
+            "code": {
+          "type": "long"
+        },
+        "codePlaceName": {
+          "type": "keyword"
+        },
+        "divisionType": {
+          "type": "keyword"
+        },
+        "phoneCode": {
+          "type": "long"
+        },
+        "placeName": {
+          "type": "text",
+          "analyzer": "case_insensitive",
+          "fielddata": true
+        }
+       }
+   },
+ "settings": {
+   "index": {
+    "routing": {
+        "allocation": {
+            "include": {
+                "_tier_preference": "data_content"
+              }
+            }
+        },
+        "analysis": {
+            "filter": {
+              "word_joiner": {
+                "output_unigrams": "true",
+                "token_separator": "",
+                "type": "shingle"
+              },
+              "synonym": {
+              "type": "synonym",
+              "synonyms": [
+                "Ha Noi,Hà Nội,hanoi,phố cổ,phoco,pho co",
+                "Ho Chi Minh,hcm,hochiminh,Hồ Chí Minh,sài gòn,saigon,sai gon",
+                "Da Nang,danang,Đà Nẵng,hội an,hoian,hoi an",
+                "Phu Quoc,phuquoc,Phú Quốc,Kiên giang,kiengiang,kien giang",
+                "Da Lat,dalat,Đà Lạt,Lâm đồng,lamdong,lam dong",
+                "Hue,Huế,thừa thiên huế,thuathienhue,thua thien hue",
+                "Vinh International Airport,Nghệ an,nghean,nghe an",
+                "Tuy Hoa,tuyhoa,Tuy Hòa,phu yen, phú yên",
+                "Pleiku,gia lai,gialai",
+                "Binh Đinh,binhdinh,Bình Định,quy nhon,quynhon,quy nhơn",
+                "Dak Lak,daklak,Đắk Lắk,Đắc Lắc,dac lac,Buôn Mê Thuật",
+                "Ba Ria - Vung Tau,Bà Rịa - Vũng Tàu,con son, côn sơn,ba ria,baria,vungtau,vung tau",
+                "Cambodia,Campuchia,cam pu chia",
+                "Phnôm Pênh,Phnom-penh,phnom,Phnôm",
+                "(Bali),bali",
+                "denpasar,indonesia",
+                "Vientiane,Viêng chăn,vieng chan, viengchan",
+                "Bangkok,Băng cốc,bang coc,bangcoc"
+                ]
+              }
+            },
+            "analyzer": {
+                "case_insensitive": {
+                    "filter": [
+                        "lowercase",
+                        "asciifolding",
+                        "synonym"
+                    ],
+                    "char_filter": [
+                        "html_strip"
+                    ],
+                    "type": "custom",
+                    "tokenizer": "whitespace"
+                }
+            }
+        }
+  }
+ }
+}
+
+// Add data
+POST /vietnam_location/_bulk
+{ "index" : { "_index" : "vietnam_location", "_id" : "1" } }
+{"code":1,"placeName":"Thành phố Hà Nội","divisionType":"thành phố trung ương","codePlaceName":"thanh_pho_ha_noi","phoneCode":24}
+{ "index" : { "_index" : "vietnam_location", "_id" : "2" } }
+{"code":2,"placeName":"Tỉnh Hà Giang","divisionType":"tỉnh","codePlaceName":"tinh-ha_giang","phoneCode":219}
+{ "index" : { "_index" : "vietnam_location", "_id" : "3" } }
+{"code":4,"placeName":"Tỉnh Cao Bằng","divisionType":"tỉnh","codePlaceName":"tinh-cao_bang","phoneCode":206}
+{ "index" : { "_index" : "vietnam_location", "_id" : "4" } }
+{"code":6,"placeName":"Tỉnh Bắc Kạn","divisionType":"tỉnh","codePlaceName":"tinh-bac_kan","phoneCode":209}
+{ "index" : { "_index" : "vietnam_location", "_id" : "5" } }
+{"code":8,"placeName":"Tỉnh Tuyên Quang","divisionType":"tỉnh","codePlaceName":"tinh-tuyen_quang","phoneCode":207}
+{ "index" : { "_index" : "vietnam_location", "_id" : "6" } }
+{"code":10,"placeName":"Tỉnh Lào Cai","divisionType":"tỉnh","codePlaceName":"tinh-lao_cai","phoneCode":214}
+{ "index" : { "_index" : "vietnam_location", "_id" : "7" } }
+{"code":11,"placeName":"Tỉnh Điện Biên","divisionType":"tỉnh","codePlaceName":"tinh-dien_bien","phoneCode":215}
+{ "index" : { "_index" : "vietnam_location", "_id" : "8" } }
+{"code":12,"placeName":"Tỉnh Lai Châu","divisionType":"tỉnh","codePlaceName":"tinh-lai_chau","phoneCode":213}
+{ "index" : { "_index" : "vietnam_location", "_id" : "9" } }
+{"code":14,"placeName":"Tỉnh Sơn La","divisionType":"tỉnh","codePlaceName":"tinh-son_la","phoneCode":212}
+{ "index" : { "_index" : "vietnam_location", "_id" : "10" } }
+{"code":15,"placeName":"Tỉnh Yên Bái","divisionType":"tỉnh","codePlaceName":"tinh-yen_bai","phoneCode":216}
+{ "index" : { "_index" : "vietnam_location", "_id" : "11" } }
+{"code":17,"placeName":"Tỉnh Hoà Bình","divisionType":"tỉnh","codePlaceName":"tinh-hoa_binh","phoneCode":218}
+{ "index" : { "_index" : "vietnam_location", "_id" : "12" } }
+{"code":19,"placeName":"Tỉnh Thái Nguyên","divisionType":"tỉnh","codePlaceName":"tinh-thai_nguyen","phoneCode":208}
+{ "index" : { "_index" : "vietnam_location", "_id" : "13" } }
+{"code":20,"placeName":"Tỉnh Lạng Sơn","divisionType":"tỉnh","codePlaceName":"tinh-lang_son","phoneCode":205}
+{ "index" : { "_index" : "vietnam_location", "_id" : "14" } }
+{"code":22,"placeName":"Tỉnh Quảng Ninh","divisionType":"tỉnh","codePlaceName":"tinh-quang_ninh","phoneCode":203}
+{ "index" : { "_index" : "vietnam_location", "_id" : "15" } }
+{"code":24,"placeName":"Tỉnh Bắc Giang","divisionType":"tỉnh","codePlaceName":"tinh-bac_giang","phoneCode":204}
+{ "index" : { "_index" : "vietnam_location", "_id" : "16" } }
+{"code":25,"placeName":"Tỉnh Phú Thọ","divisionType":"tỉnh","codePlaceName":"tinh-phu_tho","phoneCode":210}
+{ "index" : { "_index" : "vietnam_location", "_id" : "17" } }
+{"code":26,"placeName":"Tỉnh Vĩnh Phúc","divisionType":"tỉnh","codePlaceName":"tinh-vinh_phuc","phoneCode":211}
+{ "index" : { "_index" : "vietnam_location", "_id" : "18" } }
+{"code":27,"placeName":"Tỉnh Bắc Ninh","divisionType":"tỉnh","codePlaceName":"tinh-bac_ninh","phoneCode":222}
+{ "index" : { "_index" : "vietnam_location", "_id" : "19" } }
+{"code":30,"placeName":"Tỉnh Hải Dương","divisionType":"tỉnh","codePlaceName":"tinh-hai_duong","phoneCode":220}
+{ "index" : { "_index" : "vietnam_location", "_id" : "20" } }
+{"code":31,"placeName":"Thành phố Hải Phòng","divisionType":"thành phố trung ương","codePlaceName":"thanh_pho_hai_phong","phoneCode":225}
+{ "index" : { "_index" : "vietnam_location", "_id" : "21" } }
+{"code":33,"placeName":"Tỉnh Hưng Yên","divisionType":"tỉnh","codePlaceName":"tinh-hung_yen","phoneCode":221}
+{ "index" : { "_index" : "vietnam_location", "_id" : "22" } }
+{"code":34,"placeName":"Tỉnh Thái Bình","divisionType":"tỉnh","codePlaceName":"tinh-thai_binh","phoneCode":227}
+{ "index" : { "_index" : "vietnam_location", "_id" : "23" } }
+{"code":35,"placeName":"Tỉnh Hà Nam","divisionType":"tỉnh","codePlaceName":"tinh-ha_nam","phoneCode":226}
+{ "index" : { "_index" : "vietnam_location", "_id" : "24" } }
+{"code":36,"placeName":"Tỉnh Nam Định","divisionType":"tỉnh","codePlaceName":"tinh-nam_dinh","phoneCode":228}
+{ "index" : { "_index" : "vietnam_location", "_id" : "25" } }
+{"code":37,"placeName":"Tỉnh Ninh Bình","divisionType":"tỉnh","codePlaceName":"tinh-ninh_binh","phoneCode":229}
+{ "index" : { "_index" : "vietnam_location", "_id" : "26" } }
+{"code":38,"placeName":"Tỉnh Thanh Hóa","divisionType":"tỉnh","codePlaceName":"tinh-thanh_hoa","phoneCode":237}
+{ "index" : { "_index" : "vietnam_location", "_id" : "27" } }
+{"code":40,"placeName":"Tỉnh Nghệ An","divisionType":"tỉnh","codePlaceName":"tinh-nghe_an","phoneCode":238}
+{ "index" : { "_index" : "vietnam_location", "_id" : "28" } }
+{"code":42,"placeName":"Tỉnh Hà Tĩnh","divisionType":"tỉnh","codePlaceName":"tinh-ha_tinh","phoneCode":239}
+{ "index" : { "_index" : "vietnam_location", "_id" : "29" } }
+{"code":44,"placeName":"Tỉnh Quảng Bình","divisionType":"tỉnh","codePlaceName":"tinh-quang_binh","phoneCode":232}
+{ "index" : { "_index" : "vietnam_location", "_id" : "30" } }
+{"code":45,"placeName":"Tỉnh Quảng Trị","divisionType":"tỉnh","codePlaceName":"tinh-quang_tri","phoneCode":233}
+{ "index" : { "_index" : "vietnam_location", "_id" : "31" } }
+{"code":46,"placeName":"Tỉnh Thừa Thiên Huế","divisionType":"tỉnh","codePlaceName":"tinh-thua_thien_hue","phoneCode":234}
+{ "index" : { "_index" : "vietnam_location", "_id" : "32" } }
+{"code":48,"placeName":"Thành phố Đà Nẵng","divisionType":"thành phố trung ương","codePlaceName":"thanh_pho_da_nang","phoneCode":236}
+{ "index" : { "_index" : "vietnam_location", "_id" : "33" } }
+{"code":49,"placeName":"Tỉnh Quảng Nam","divisionType":"tỉnh","codePlaceName":"tinh-quang_nam","phoneCode":235}
+{ "index" : { "_index" : "vietnam_location", "_id" : "34" } }
+{"code":51,"placeName":"Tỉnh Quảng Ngãi","divisionType":"tỉnh","codePlaceName":"tinh-quang_ngai","phoneCode":255}
+{ "index" : { "_index" : "vietnam_location", "_id" : "35" } }
+{"code":52,"placeName":"Tỉnh Bình Định","divisionType":"tỉnh","codePlaceName":"tinh-binh_dinh","phoneCode":256}
+{ "index" : { "_index" : "vietnam_location", "_id" : "36" } }
+{"code":54,"placeName":"Tỉnh Phú Yên","divisionType":"tỉnh","codePlaceName":"tinh-phu_yen","phoneCode":257}
+{ "index" : { "_index" : "vietnam_location", "_id" : "37" } }
+{"code":56,"placeName":"Tỉnh Khánh Hòa","divisionType":"tỉnh","codePlaceName":"tinh-khanh_hoa","phoneCode":258}
+{ "index" : { "_index" : "vietnam_location", "_id" : "38" } }
+{"code":58,"placeName":"Tỉnh Ninh Thuận","divisionType":"tỉnh","codePlaceName":"tinh-ninh_thuan","phoneCode":259}
+{ "index" : { "_index" : "vietnam_location", "_id" : "39" } }
+{"code":60,"placeName":"Tỉnh Bình Thuận","divisionType":"tỉnh","codePlaceName":"tinh-binh_thuan","phoneCode":252}
+{ "index" : { "_index" : "vietnam_location", "_id" : "40" } }
+{"code":62,"placeName":"Tỉnh Kon Tum","divisionType":"tỉnh","codePlaceName":"tinh-kon_tum","phoneCode":260}
+{ "index" : { "_index" : "vietnam_location", "_id" : "41" } }
+{"code":64,"placeName":"Tỉnh Gia Lai","divisionType":"tỉnh","codePlaceName":"tinh-gia_lai","phoneCode":269}
+{ "index" : { "_index" : "vietnam_location", "_id" : "42" } }
+{"code":66,"placeName":"Tỉnh Đắk Lắk","divisionType":"tỉnh","codePlaceName":"tinh-dak_lak","phoneCode":262}
+{ "index" : { "_index" : "vietnam_location", "_id" : "43" } }
+{"code":67,"placeName":"Tỉnh Đắk Nông","divisionType":"tỉnh","codePlaceName":"tinh-dak_nong","phoneCode":261}
+{ "index" : { "_index" : "vietnam_location", "_id" : "44" } }
+{"code":68,"placeName":"Tỉnh Lâm Đồng","divisionType":"tỉnh","codePlaceName":"tinh-lam_dong","phoneCode":263}
+{ "index" : { "_index" : "vietnam_location", "_id" : "45" } }
+{"code":70,"placeName":"Tỉnh Bình Phước","divisionType":"tỉnh","codePlaceName":"tinh-binh_phuoc","phoneCode":271}
+{ "index" : { "_index" : "vietnam_location", "_id" : "46" } }
+{"code":72,"placeName":"Tỉnh Tây Ninh","divisionType":"tỉnh","codePlaceName":"tinh-tay_ninh","phoneCode":276}
+{ "index" : { "_index" : "vietnam_location", "_id" : "47" } }
+{"code":74,"placeName":"Tỉnh Bình Dương","divisionType":"tỉnh","codePlaceName":"tinh-binh_duong","phoneCode":274}
+{ "index" : { "_index" : "vietnam_location", "_id" : "48" } }
+{"code":75,"placeName":"Tỉnh Đồng Nai","divisionType":"tỉnh","codePlaceName":"tinh-dong_nai","phoneCode":251}
+{ "index" : { "_index" : "vietnam_location", "_id" : "49" } }
+{"code":77,"placeName":"Tỉnh Bà Rịa - Vũng Tàu","divisionType":"tỉnh","codePlaceName":"tinh-ba_ria_vung_tau","phoneCode":254}
+{ "index" : { "_index" : "vietnam_location", "_id" : "50" } }
+{"code":79,"placeName":"Thành phố Hồ Chí Minh","divisionType":"thành phố trung ương","codePlaceName":"thanh_pho_ho_chi_minh","phoneCode":28}
+{ "index" : { "_index" : "vietnam_location", "_id" : "51" } }
+{"code":80,"placeName":"Tỉnh Long An","divisionType":"tỉnh","codePlaceName":"tinh-long_an","phoneCode":272}
+{ "index" : { "_index" : "vietnam_location", "_id" : "52" } }
+{"code":82,"placeName":"Tỉnh Tiền Giang","divisionType":"tỉnh","codePlaceName":"tinh-tien_giang","phoneCode":273}
+{ "index" : { "_index" : "vietnam_location", "_id" : "53" } }
+{"code":83,"placeName":"Tỉnh Bến Tre","divisionType":"tỉnh","codePlaceName":"tinh-ben_tre","phoneCode":275}
+{ "index" : { "_index" : "vietnam_location", "_id" : "54" } }
+{"code":84,"placeName":"Tỉnh Trà Vinh","divisionType":"tỉnh","codePlaceName":"tinh-tra_vinh","phoneCode":294}
+{ "index" : { "_index" : "vietnam_location", "_id" : "55" } }
+{"code":86,"placeName":"Tỉnh Vĩnh Long","divisionType":"tỉnh","codePlaceName":"tinh-vinh_long","phoneCode":270}
+{ "index" : { "_index" : "vietnam_location", "_id" : "56" } }
+{"code":87,"placeName":"Tỉnh Đồng Tháp","divisionType":"tỉnh","codePlaceName":"tinh-dong_thap","phoneCode":277}
+{ "index" : { "_index" : "vietnam_location", "_id" : "57" } }
+{"code":89,"placeName":"Tỉnh An Giang","divisionType":"tỉnh","codePlaceName":"tinh-an_giang","phoneCode":296}
+{ "index" : { "_index" : "vietnam_location", "_id" : "58" } }
+{"code":91,"placeName":"Tỉnh Kiên Giang","divisionType":"tỉnh","codePlaceName":"tinh-kien_giang","phoneCode":297}
+{ "index" : { "_index" : "vietnam_location", "_id" : "59" } }
+{"code":92,"placeName":"Thành phố Cần Thơ","divisionType":"thành phố trung ương","codePlaceName":"thanh_pho_can_tho","phoneCode":292}
+{ "index" : { "_index" : "vietnam_location", "_id" : "60" } }
+{"code":93,"placeName":"Tỉnh Hậu Giang","divisionType":"tỉnh","codePlaceName":"tinh-hau_giang","phoneCode":293}
+{ "index" : { "_index" : "vietnam_location", "_id" : "61" } }
+{"code":94,"placeName":"Tỉnh Sóc Trăng","divisionType":"tỉnh","codePlaceName":"tinh-soc_trang","phoneCode":299}
+{ "index" : { "_index" : "vietnam_location", "_id" : "62" } }
+{"code":95,"placeName":"Tỉnh Bạc Liêu","divisionType":"tỉnh","codePlaceName":"tinh-bac_lieu","phoneCode":291}
+{ "index" : { "_index" : "vietnam_location", "_id" : "63" } }
+{"code":96,"placeName":"Tỉnh Cà Mau","divisionType":"tỉnh","codePlaceName":"tinh-ca_mau","phoneCode":290}

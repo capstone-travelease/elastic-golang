@@ -1,7 +1,6 @@
 package services
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -30,22 +29,6 @@ func ConnectElastic() (*elasticsearch.Client, error) {
 	return es, nil
 }
 
-func IndexDoc() {
-	es, err := ConnectElastic()
-	if err != nil {
-		log.Fatalf("Error creating the client: %s", err)
-	}
-
-	document := struct {
-		Name string `json:"name"`
-	}{
-		"go-elasticsearch",
-	}
-	data, _ := json.Marshal(document)
-
-	es.Index("my_index", bytes.NewReader(data))
-}
-
 func SearchDoc(inputName string) ([]models.LocationResponse, error) {
 	es, err := ConnectElastic()
 	if err != nil {
@@ -58,9 +41,7 @@ func SearchDoc(inputName string) ([]models.LocationResponse, error) {
 	query := fmt.Sprintf(`{
 		"query": {
 			"match": {
-				"place_name": {
-					"query": "%v"
-				}
+				"placeName": "%v"
 			}
 		}
 	}`, inputName)
