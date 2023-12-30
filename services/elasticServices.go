@@ -40,8 +40,12 @@ func SearchDoc(inputName string) ([]models.LocationResponse, error) {
 
 	query := fmt.Sprintf(`{
 		"query": {
-			"match": {
-				"placeName": "%v"
+			"multi_match" : {
+				"query": "%v",
+				"fields": [ "placeName", "codePlaceName" ],
+				"fuzziness": "AUTO",
+				"prefix_length": 3,
+				"fuzzy_transpositions": "true"
 			}
 		}
 	}`, inputName)
