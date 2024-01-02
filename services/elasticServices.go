@@ -35,25 +35,10 @@ func SearchDoc(inputName string) ([]models.LocationResponse, error) {
 		log.Fatalf("Error creating the client: %s", err)
 	}
 
-	var r models.SearchResults
-	var result []models.LocationResponse
-
 	if inputName == "" {
 		query := `{"size": 63,"track_total_hits": true}`
 
-		res, _ := es.Search(
-			es.Search.WithIndex("vietnam_location"),
-			es.Search.WithBody(strings.NewReader(query)),
-		)
-
-		json.NewDecoder(res.Body).Decode(&r)
-
-		data := r.Hits.Hits
-
-		for i := range data {
-			result = append(result, data[i].Source)
-		}
-		return result, nil
+		return SearchLogic(es, query)
 	} else {
 		query := fmt.Sprintf(`{
 			"query": {
@@ -67,18 +52,25 @@ func SearchDoc(inputName string) ([]models.LocationResponse, error) {
 				}
 		}`, inputName)
 
-		res, _ := es.Search(
-			es.Search.WithIndex("vietnam_location"),
-			es.Search.WithBody(strings.NewReader(query)),
-		)
-
-		json.NewDecoder(res.Body).Decode(&r)
-
-		data := r.Hits.Hits
-
-		for i := range data {
-			result = append(result, data[i].Source)
-		}
-		return result, nil
+		return SearchLogic(es, query)
 	}
+}
+
+func SearchLogic(es *elasticsearch.Client, query string) ([]models.LocationResponse, error) {
+	var r models.SearchResults
+	var result []models.LocationResponse
+
+	res, _ := es.Search(
+		es.Search.WithIndex("vietnam_location"),
+		es.Search.WithBody(strings.NewReader(query)),
+	)
+
+	json.NewDecoder(res.Body).Decode(&r)
+
+	data := r.Hits.Hits
+
+	for i := range data {
+		result = append(result, data[i].Source)
+	}
+	return result, nil
 }

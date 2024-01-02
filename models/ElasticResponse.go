@@ -40,26 +40,3 @@ type LocationResponse struct {
 	CodePlaceName string `json:"codePlaceName"`
 	PhoneCode     int    `json:"phoneCode"`
 }
-
-type SearchAllResults struct {
-	Took   int                        `json:"took"`
-	Shards json.RawMessage            `json:"_shards"`
-	Hits   HitsAll                    `json:"hits"`
-	Aggs   map[string]json.RawMessage `json:"aggregations"`
-}
-
-type HitsAll struct {
-	Total int
-	Hits  []HitAllData `json:"hits"`
-}
-
-type HitAllData struct {
-	Index  string         `json:"_index"`
-	Id     string         `json:"_id"`
-	Score  float64        `json:"_score"`
-	Source ResultLocation `json:"_source"`
-}
-type ResultLocation struct {
-	PlaceName string `json:"placeName"`
-	Code      int    `json:"code"`
-}
