@@ -38,56 +38,47 @@ func SearchDoc(inputName string) ([]models.LocationResponse, error) {
 	var r models.SearchResults
 	var result []models.LocationResponse
 
-	query := fmt.Sprintf(`{
-		"query": {
-			"multi_match" : {
-				"query": "%v",
-				"fields": [ "placeName", "codePlaceName" ],
-				"fuzziness": "AUTO",
-				"prefix_length": 3,
-				"fuzzy_transpositions": "true"
-			}
+	if inputName == "" {
+		query := `{"size": 63,"track_total_hits": true}`
+
+		res, _ := es.Search(
+			es.Search.WithIndex("vietnam_location"),
+			es.Search.WithBody(strings.NewReader(query)),
+		)
+
+		json.NewDecoder(res.Body).Decode(&r)
+
+		data := r.Hits.Hits
+
+		for i := range data {
+			result = append(result, data[i].Source)
 		}
-	}`, inputName)
+		return result, nil
+	} else {
+		query := fmt.Sprintf(`{
+			"query": {
+				"multi_match" : {
+					"query": "%v",
+					"fields": [ "placeName", "codePlaceName" ],
+					"fuzziness": "AUTO",
+					"prefix_length": 3,
+					"fuzzy_transpositions": "true"
+					}
+				}
+		}`, inputName)
 
-	res, _ := es.Search(
-		es.Search.WithIndex("vietnam_location"),
-		es.Search.WithBody(strings.NewReader(query)),
-	)
+		res, _ := es.Search(
+			es.Search.WithIndex("vietnam_location"),
+			es.Search.WithBody(strings.NewReader(query)),
+		)
 
-	json.NewDecoder(res.Body).Decode(&r)
+		json.NewDecoder(res.Body).Decode(&r)
 
-	data := r.Hits.Hits
+		data := r.Hits.Hits
 
-	for i := range data {
-		result = append(result, data[i].Source)
+		for i := range data {
+			result = append(result, data[i].Source)
+		}
+		return result, nil
 	}
-	return result, nil
-}
-
-func AllLocation() ([]models.ResultLocation, error) {
-	es, err := ConnectElastic()
-	if err != nil {
-		log.Fatalf("Error creating the client: %s", err)
-	}
-
-	var r models.SearchAllResults
-	var result []models.ResultLocation
-
-	query := `{"size": 63,"track_total_hits": true}`
-
-	res, _ := es.Search(
-		es.Search.WithIndex("vietnam_location"),
-		es.Search.WithBody(strings.NewReader(query)),
-	)
-
-	json.NewDecoder(res.Body).Decode(&r)
-
-	data := r.Hits.Hits
-
-	for i := range data {
-		result = append(result, data[i].Source)
-	}
-
-	return result, nil
 }
