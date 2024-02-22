@@ -48,8 +48,8 @@ func SearchDoc(inputName string) ([]models.LocationResponse, error) {
 					"fuzziness": "AUTO",
 					"prefix_length": 3,
 					"fuzzy_transpositions": "true"
-					}
 				}
+			}
 		}`, inputName)
 
 		return SearchLogic(es, query)
