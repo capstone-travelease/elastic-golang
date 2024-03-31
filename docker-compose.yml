@@ -3,6 +3,8 @@ services:
   golang:
     container_name: elastic-golang
     image: coderbillzay/elastic-golang
+    env_file:
+      - .env
     ports:
       - '2160:2160'
     volumes:
