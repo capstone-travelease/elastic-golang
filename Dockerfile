@@ -1,20 +1,14 @@
-FROM golang:1.22-alpine as builder
+FROM golang:1.22-alpine
 
-WORKDIR /app
+WORKDIR /usr/app
 
 COPY go.mod go.sum ./
-
-RUN go mod download
+RUN go mod download && go mod verify
 
 COPY . .
+RUN go install github.com/cosmtrek/air@latest
 
 COPY .env .env
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o elastic-golang
-
-# This one will reduce size of project image
-FROM scratch
-
-COPY --from=builder /app/elastic-golang /
-
-ENTRYPOINT ["/elastic-golang"]
+EXPOSE 2160
+CMD ["air"]
