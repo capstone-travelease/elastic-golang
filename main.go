@@ -29,7 +29,6 @@ func main() {
 	{
 		api.GET("/location/search", controller.SearchElasticController)
 	}
-	app.GET("/connectDB", controller.PostgresControllerConnect)
 
 	app.Run(":" + os.Getenv("PORT"))
 }

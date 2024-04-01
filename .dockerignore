@@ -1,0 +1,54 @@
+# .dockerignore
+vendor/
+
+# Ignore Go build cache
+**/go-build
+
+# Ignore Go test cache
+**/go-test
+
+# Ignore Go module cache
+**/go-mod
+
+# Ignore .git directory
+.git
+
+# Ignore .gitignore file
+.gitignore
+
+# Ignore .dockerignore file
+# .dockerignore
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.tmp
+
+# Ignore IDE files
+.idea/
+*.iml
+
+# Ignore editor files
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore build artifacts
+bin/
+dist/
+
+# Ignore test coverage reports
+coverage/
+
+# Ignore documentation
+docs/
+elastic_code.yml
+
+# Ignore local configuration files
+.env
+.env.*
