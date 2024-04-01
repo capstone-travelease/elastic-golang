@@ -50,5 +50,5 @@ docs/
 elastic_code.yml
 
 # Ignore local configuration files
-.env
-.env.*
+# .env
+# .env.*
