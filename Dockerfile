@@ -8,6 +8,8 @@ RUN go mod download
 
 COPY . .
 
+COPY .env .env
+
 RUN CGO_ENABLED=0 GOOS=linux go build -o elastic-golang
 
 # This one will reduce size of project image
